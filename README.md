@@ -28,14 +28,33 @@ source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 az login
-uvicorn main:app --reload --port 8000
 ```
 
-Before starting the server, update `.env` with your own Foundry project endpoint and agent name:
+### Configure and test Foundry first
+
+Before updating `.env`, create your model deployment and agent in Azure AI Foundry, attach the
+synthetic policy documents from `06-policy-knowledge-base/`, and test the agent in the Foundry
+playground. The agent should answer an in-scope policy question, decline an out-of-scope question,
+and avoid inventing answers when the policy source is silent. For the full sequence, see
+[06-policy-knowledge-base/README.md](06-policy-knowledge-base/README.md).
+
+After the Foundry playground test succeeds, update `02-backend-api/.env` with the working
+configuration:
 
 ```env
-AZURE_AI_PROJECT_ENDPOINT=https://<resource>.services.ai.azure.com/api/projects/<project-name>
-AZURE_AI_AGENT_NAME=<your-agent-name>
+AZURE_AI_PROJECT_ENDPOINT=https://niteen-test-useast-01.services.ai.azure.com/api/projects/niteen-test-useast-01
+AZURE_AI_AGENT_NAME=policydesk-demo
+AZURE_AI_AGENT_VERSION=8
+AZURE_AI_AGENT_ISOLATION_KEY=<your-isolation-key>
+```
+
+Replace `<your-isolation-key>` with the value from your Foundry configuration. Never commit or
+publish the real isolation key.
+
+Start the local API:
+
+```bash
+uvicorn main:app --reload --port 8000
 ```
 
 Open `01-frontend/index.html` in a browser and submit a policy question. The backend health check
