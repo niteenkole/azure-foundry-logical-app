@@ -2,21 +2,14 @@
 
 This folder owns the saved-agent integration. The backend passes a validated question into `complete_chat()`. The saved agent owns the AI instructions and knowledge grounding; the local connector sends the request through the agent-bound Responses API.
 
-## Baseline Versus Demo Path
-
-Direct model call:
+## Agent-Bound Request Path
 
 ```text
-OpenAI v1 client -> gpt-5-mini deployment -> general model response
+AIProjectClient -> configured agent -> instructions + knowledge -> grounded response
 ```
 
-Live demo path:
-
-```text
-AIProjectClient -> policydesk-youtube-demo agent -> instructions + knowledge -> grounded response
-```
-
-The live demo uses the second path. The agent is the reusable Azure AI configuration that keeps the policy-only behavior and knowledge source attached to the application request.
+The agent is the reusable Azure AI configuration that keeps the policy-only behavior and knowledge
+source attached to the application request.
 
 ## What This Module Does
 
@@ -29,25 +22,24 @@ The live demo uses the second path. The agent is the reusable Azure AI configura
 
 The frontend does not know the deployment name and never receives the API key.
 
-## Explanation
+## Model Choice
 
-"Step 3 gave us a validated request. The AI policy itself is configured in Foundry. Step 4 is the integration boundary: this function connects our backend to the Azure AI Foundry deployment, so the frontend does not need to know which model or deployment is behind the assistant."
+Create an agent in your Foundry project and connect it to a model deployment available in your
+region. The connector targets the agent, not the model deployment directly, so the agent
+instructions and attached knowledge source are applied.
 
-## Model Choice for This Demo
+Model availability and pricing vary by region, deployment type, quota, and date. Review the Azure
+AI Foundry Model Catalog for current availability and pricing before choosing a deployment.
 
-For this demo, create a new agent named **`policydesk-youtube-demo`** and connect it to the configured `gpt-5-mini` deployment. The connector targets the new agent, not the model deployment directly, so the agent instructions and attached knowledge source are applied.
-
-Model availability and pricing vary by region, deployment type, quota, and date. 
-
-demo values:
+Suggested starting values:
 
 ```text
-Agent name: policydesk-youtube-demo
+Agent name: <your-agent-name>
 Agent version: latest
 Underlying model: gpt-5-mini
 Purpose: short grounded enterprise-policy answers
 Output cap: 800 completion tokens for GPT-5
-Usage: small manual demo only
+Usage: small development workload
 ```
 
 Keep the deployment name separate from the model name. The application sends the deployment name; Azure maps that deployment to the selected model.
@@ -65,7 +57,7 @@ Keep the deployment name separate from the model name. The application sends the
 9. Create the deployment and wait until its status is ready.
 10. Open the deployment details and copy the endpoint, deployment name, and selected API version.
 
-This connector follows the Foundry-generated Entra ID sample, so it uses `DefaultAzureCredential` rather than an API key.
+Do not paste credentials into the video recording. This connector follows the Foundry-generated Entra ID sample, so it uses `DefaultAzureCredential` rather than an API key.
 
 ## Configure the Local Connector
 
@@ -73,10 +65,11 @@ Set the values in the backend environment, not in source code:
 
 ```env
 AZURE_AI_PROJECT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-project
-AZURE_AI_AGENT_NAME=policydesk-youtube-demo
+AZURE_AI_AGENT_NAME=<your-agent-name>
 ```
 
-The project endpoint and agent name must match the saved agent. 
+The project endpoint and agent name must match the saved agent. Never commit `.env` or print
+credentials in a terminal.
 
 ## Test the Deployment Before the Chatbot
 
@@ -89,10 +82,8 @@ The project endpoint and agent name must match the saved agent.
 ## Configuration
 
 ```env
-AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_API_KEY=your-key
-AZURE_AI_AGENT_NAME=policydesk-youtube-demo
-AZURE_OPENAI_API_VERSION=2025-08-07
+AZURE_AI_PROJECT_ENDPOINT=https://<resource>.services.ai.azure.com/api/projects/<project-name>
+AZURE_AI_AGENT_NAME=<your-agent-name>
 ```
 
 ## Live Check
@@ -111,8 +102,8 @@ Browser
   -> POST /ask
 FastAPI + guardrails
   -> complete_chat()
-AzureOpenAI SDK
-  -> Azure AI Foundry deployment
+AIProjectClient
+  -> Azure AI Foundry agent
   -> answer text
 Browser
 ```
