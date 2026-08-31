@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>04 Foundry | Enterprise Policy Assistant</title><link rel="stylesheet" href="../shared/board.css"></head><body>
+<header><div class="eyebrow">Build step 4 of 6 · drawing board</div><h1>Connect the governed request to Foundry.</h1><p class="subtitle">Now the backend sends the approved request to an Azure AI Foundry model deployment and translates the result into the answer format the frontend expects.</p></header>
+<main><section class="board"><div class="board-top"><span>VISUAL FLOW</span><span>MODEL CALL RESPONSIBILITY</span></div><div class="board-body"><div><div class="flow"><div class="box">Policy request<small>approved by backend</small></div><div class="arrow">→</div><div class="box">Foundry project<small>deployment selected</small></div><div class="arrow">→</div><div class="box">Model response<small>normalized for UI</small></div></div><div class="note"><strong>Integration decision:</strong> keep the Foundry SDK call behind one backend service function so changing deployments does not change the frontend.</div><div class="live-steps"><h3>Live steps</h3><ol><li>Create the Azure AI Foundry project and model deployment.</li><li>Set <code>AZURE_ENDPOINT</code>, <code>AZURE_API_KEY</code>, and <code>MODEL_DEPLOYMENT</code> locally.</li><li>Make one real backend request and show the response in the terminal.</li></ol></div></div></div></section><aside class="code-panel"><div class="code-top"><span>CODE BOARD</span><span>foundry/client.py</span></div><pre><span class="token-key">from</span> openai <span class="token-key">import</span> AzureOpenAI
+
+client = AzureOpenAI(
+    azure_endpoint=environ[<span class="token-string">"AZURE_ENDPOINT"</span>],
+    api_key=environ[<span class="token-string">"AZURE_API_KEY"</span>],
+    api_version=<span class="token-string">"2024-10-21"</span>,
+)
+
+response = client.chat.completions.create(
+    model=environ[<span class="token-string">"MODEL_DEPLOYMENT"</span>],
+    messages=messages,
+)</pre></aside></main>
+<div class="nav"><a class="button" href="../03-policy/index.html">← Policy</a><a class="button primary" href="../05-controls/index.html">Next: Controls →</a></div>
+</body></html>
