@@ -117,9 +117,9 @@ FastAPI's CORS middleware allows the browser frontend to call the local backend 
 
 The backend reads configuration from the process environment with Python's `os.environ`. For local development, `python-dotenv` loads the backend folder's `.env` when `main.py` starts. The API key is not hardcoded in `main.py`, and `.env` is ignored by Git.
 
-## Recording Explanation
+## Explanation
 
-Use this sequence while presenting the backend:
+backend sequence:
 
 1. FastAPI creates the HTTP boundary between the browser and the model.
 2. Pydantic validates the question and response contract.
