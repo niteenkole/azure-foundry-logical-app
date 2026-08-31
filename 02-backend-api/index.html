@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>02 Backend API | Enterprise Policy Assistant</title><link rel="stylesheet" href="../shared/board.css"></head><body>
+<header><div class="eyebrow">Build step 2 of 5 · drawing board</div><h1>Put a trusted backend behind the screen.</h1><p class="subtitle">The backend is the application boundary. It receives the question, owns the credential, and becomes the only component allowed to call Azure AI Foundry.</p></header>
+<main><section class="board"><div class="board-top"><span>VISUAL FLOW</span><span>BACKEND RESPONSIBILITY</span></div><div class="board-body"><div><div class="flow"><div class="box">Browser<small>untrusted client</small></div><div class="arrow">→</div><div class="box">POST /ask<small>validated API request</small></div><div class="arrow">→</div><div class="box">Foundry client<small>server-side credential</small></div></div><div class="note"><strong>Security decision:</strong> the browser never receives the model endpoint secret. The backend owns configuration and controls the outbound call.</div><div class="live-steps"><h3>Live steps</h3><ol><li>Create a virtual environment and install <code>fastapi</code>, <code>uvicorn</code>, and the Azure client.</li><li>Create <code>backend/main.py</code> with <code>POST /ask</code>.</li><li>Run <code>uvicorn backend.main:app --reload</code> and test one question.</li></ol></div></div></div></section><aside class="code-panel"><div class="code-top"><span>CODE BOARD</span><span>backend/main.py</span></div><pre><span class="token-key">from</span> fastapi <span class="token-key">import</span> FastAPI
+<span class="token-key">from</span> os <span class="token-key">import</span> environ
+
+app = FastAPI()
+
+@app.post(<span class="token-string">"/ask"</span>)
+<span class="token-key">async def</span> ask(request: Question):
+    <span class="token-comment"># credential stays on the server</span>
+    response = foundry_client.complete(
+        request.question
+    )
+    <span class="token-key">return</span> {<span class="token-string">"answer"</span>: response.text}</pre></aside></main>
+<div class="nav"><a class="button" href="../01-frontend/index.html">← Frontend</a><a class="button primary" href="../03-policy/index.html">Next: Policy →</a></div>
+</body></html>
