@@ -48,9 +48,7 @@ AZURE_AI_AGENT_VERSION=8
 AZURE_AI_AGENT_ISOLATION_KEY=<your-isolation-key>
 ```
 
-Replace `<your-isolation-key>` with the value from your Foundry configuration. Never commit or
-publish the real isolation key.
-
+Replace `<your-isolation-key>` with the value from your Foundry configuration. 
 Start the local API:
 
 ```bash
@@ -60,8 +58,6 @@ uvicorn main:app --reload --port 8000
 Open `01-frontend/index.html` in a browser and submit a policy question. The backend health check
 is available at `http://127.0.0.1:8000/health`.
 
-Never commit `.env`. It contains environment-specific configuration and is excluded by
-`.gitignore`.
 
 ## Flow
 
