@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>05 Azure Knowledge | Enterprise Policy Assistant</title><link rel="stylesheet" href="../shared/board.css"></head><body>
+<header><div class="eyebrow">Build step 5 of 6 · Azure AI Foundry drawing board</div><h1>Ground answers with Foundry knowledge.</h1><p class="subtitle">The policy documents are uploaded into an Azure AI Foundry knowledge source. Retrieval and grounding happen in Foundry, not in a local Python search script.</p></header>
+<main><section class="board"><div class="board-top"><span>FOUNDRY KNOWLEDGE FLOW</span><span>NO LOCAL DOCUMENT SEARCH</span></div><div class="board-body"><div><div class="flow"><div class="box">Policy files<small>synthetic source documents</small></div><div class="arrow">→</div><div class="box">Foundry knowledge<small>connected source</small></div><div class="arrow">→</div><div class="box">Grounded model<small>retrieve and answer</small></div></div><div class="note"><strong>Azure decision:</strong> document storage, indexing, retrieval, and grounding belong inside the Azure AI Foundry knowledge workflow. The local files are only content to upload for the demonstration.</div><div class="live-steps"><h3>Live steps</h3><ol><li>Upload the synthetic policy files to the Azure AI Foundry knowledge source.</li><li>Configure the Foundry grounding connection and instructions.</li><li>Ask a question and show the grounded answer with its relevant source.</li></ol></div></div></div></section><aside class="code-panel"><div class="code-top"><span>FOUNDRY CONFIGURATION BOARD</span><span>Knowledge source</span></div><pre>Policy documents
+        ↓ upload
+Azure AI Foundry
+knowledge source
+        ↓ retrieve + ground
+Foundry model
+        ↓
+Grounded answer + sources</pre></aside></main>
+<div class="nav"><a class="button" href="../04-foundry/index.html">← Foundry model</a><a class="button primary" href="../05-controls/index.html">Next: Controls →</a></div>
+</body></html>
