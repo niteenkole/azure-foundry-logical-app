@@ -2,10 +2,11 @@
 
 This service receives browser questions and calls the Azure AI Foundry model deployment. The browser never receives the Azure credential. Python is the implementation language for this API; the demo focus is the Azure AI application and its enterprise controls, not Python itself.
 
-## Demo Routing Decision
+## Agent Routing
 
-The live recording will route requests to the new `policydesk-youtube-demo` agent created during the video, not directly to the base `policydesk-gpt-5-mini` deployment. 
-The existing `niteen-test-policydesk` agent is a reference only.
+The connector routes requests to the named agent configured in `.env`, rather than directly to a
+base model deployment. The saved agent applies its instructions and attached knowledge source to
+each request.
 
 ```text
 Frontend
@@ -117,15 +118,7 @@ FastAPI's CORS middleware allows the browser frontend to call the local backend 
 
 The backend reads configuration from the process environment with Python's `os.environ`. For local development, `python-dotenv` loads the backend folder's `.env` when `main.py` starts. The API key is not hardcoded in `main.py`, and `.env` is ignored by Git.
 
-## Explanation
-
-backend sequence:
-
-1. FastAPI creates the HTTP boundary between the browser and the model.
-2. Pydantic validates the question and response contract.
-3. The Azure AI Projects client creates an OpenAI client bound to the saved PolicyDesk agent.
-4. The agent-bound OpenAI client sends the request through the Responses API.
-5. Uvicorn runs the API locally so the frontend can call it.
+## Request Path
 
 The request path is:
 
@@ -172,11 +165,11 @@ Sign in before starting the backend so `DefaultAzureCredential` can obtain a tok
 az login
 ```
 
-Use this environment configuration:
+Use your own Foundry environment configuration:
 
 ```env
-AZURE_AI_PROJECT_ENDPOINT=https://niteen-test-useast-01.services.ai.azure.com/api/projects/niteen-test-useast-01
-AZURE_AI_AGENT_NAME=policydesk-youtube-demo
+AZURE_AI_PROJECT_ENDPOINT=https://<resource>.services.ai.azure.com/api/projects/<project-name>
+AZURE_AI_AGENT_NAME=<your-agent-name>
 ```
 
 The project endpoint and agent name must match the saved agent's Foundry configuration. The installed SDK binds directly to the active named agent; no API version setting is used.
@@ -232,7 +225,8 @@ az role assignment list \
 	-o table
 ```
 
-The role scope must match the same Foundry project used by `AZURE_AI_PROJECT_ENDPOINT`. For example, a role on `niteen-test-02` does not automatically grant access to a different project or resource.
+The role scope must match the same Foundry project used by `AZURE_AI_PROJECT_ENDPOINT`. A role on
+one project does not automatically grant access to a different project or resource.
 
 ### 4. Confirm the Entra token can be obtained
 
