@@ -10,10 +10,6 @@ This folder adds operational visibility around the model call without writing se
 - Records successful and failed model calls.
 - Excludes the user's question and API key from telemetry metadata.
 
-## Explanation
-
-"The final layer makes the application operable. We need to know which request completed, which deployment handled it, and how long it took. We deliberately do not log the prompt or credential because prompts may contain sensitive business data and credentials must never enter logs."
-
 ## Run The Tests
 
 ```bash
