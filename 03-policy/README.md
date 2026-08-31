@@ -29,10 +29,6 @@ cd ai-demo/azure-foundry-logical-app/03-policy
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v test_guardrails.py
 ```
 
-## Explanation
-
-"Before we send anything to the model, the local connector checks only the HTTP request shape. The AI policy is configured in Foundry: this is not a general chatbot, user requests cannot override its role, and it answers only from retrieved approved policy content. If the source is silent or the topic is unrelated, it must decline."
-
 ## Request Flow
 
 ```text
