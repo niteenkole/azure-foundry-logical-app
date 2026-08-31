@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure AI Foundry Logical Application Flow</title>
+<style>
+:root { --ink:#163243; --muted:#58717f; --line:#b8cdd6; --cyan:#087f9d; --blue:#1769c2; --green:#18734d; --amber:#ad6500; --red:#b83832; --panel:#ffffff; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; color:var(--ink); font:15px/1.45 "Avenir Next", "Helvetica Neue", sans-serif; background:linear-gradient(135deg, #f6fbfc 0%, #e8f1f4 55%, #d8e8ed 100%); display:flex; flex-direction:column; }
+header { padding:20px clamp(22px,5vw,72px) 14px; flex:0 0 auto; }
+.eyebrow { color:var(--cyan); font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:800; }
+h1 { max-width:1200px; margin:7px 0 10px; font-size:clamp(30px,4.4vw,54px); line-height:1.02; letter-spacing:-.035em; white-space:nowrap; }
+.subtitle { max-width:1200px; color:var(--muted); margin:0; font-size:14px; white-space:nowrap; }
+main { flex:1 1 auto; min-height:0; padding:0 clamp(12px,3vw,42px) 18px; display:flex; }
+.stage { overflow:hidden; flex:1 1 auto; min-height:0; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.86); box-shadow:0 18px 50px rgba(40,73,86,.18); display:flex; flex-direction:column; }
+.stage-top { display:flex; justify-content:space-between; padding:13px 18px; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; }
+.live { color:var(--green); }
+svg { display:block; width:100%; height:100%; min-height:0; flex:1 1 auto; }
+.stage svg text { fill:#173847 !important; }
+.stage svg rect[fill="#10202c"], .stage svg rect[fill="#102a38"], .stage svg rect[fill="#132f40"], .stage svg rect[fill="#173e52"], .stage svg rect[fill="#193d39"], .stage svg rect[fill="#193b36"], .stage svg rect[fill="#182f3d"] { fill:#ffffff !important; }
+.stage svg #api > rect { fill:#ffffff !important; }
+.stage svg rect[stroke="#315264"] { fill:#f8fbfc !important; }
+.stage svg .packet text { fill:#173847 !important; }
+.node { transition:opacity .35s, filter .35s; }
+.dim { opacity:.28; filter:saturate(.4); }
+.focus { filter:drop-shadow(0 0 13px rgba(98,217,234,.65)); }
+.packet { opacity:0; }
+.packet.go { opacity:1; }
+.packet circle { fill:var(--cyan); stroke:#e7fbff; stroke-width:2; }
+.packet text { fill:#e7fbff; font-size:10px; font-weight:800; }
+.packet.public circle { fill:var(--amber); stroke:#fff2da; }
+.controls { position:relative; z-index:2; display:flex; align-items:center; gap:10px; padding:14px 18px; border-top:1px solid var(--line); background:#f8fbfc; pointer-events:auto; }
+button { border:1px solid #3b6175; border-radius:8px; color:var(--ink); background:#ffffff; padding:10px 16px; cursor:pointer; font:inherit; font-weight:700; box-shadow:0 2px 5px rgba(40,73,86,.12); }
+button:hover { border-color:var(--cyan); background:#e8f7fa; }
+button:focus-visible { outline:3px solid var(--cyan); outline-offset:2px; }
+#play { background:var(--blue); color:#ffffff; border-color:var(--blue); }
+#caption { color:var(--muted); margin-left:auto; text-align:right; }
+@media (max-width:700px) { header { padding-top:14px; } h1 { font-size:32px; white-space:normal; } .subtitle { white-space:normal; } .controls { align-items:flex-start; flex-wrap:wrap; } #caption { flex-basis:100%; margin-left:0; text-align:left; } svg { min-height:420px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Enterprise Policy Assistant · Azure AI Foundry</div>
+  <h1>Build an Enterprise Policy Assistant with Azure AI Foundry.</h1>
+  <p class="subtitle">A real browser-to-backend-to-Azure AI Foundry application that answers policy questions through a governed model workflow.</p>
+</header>
+<main>
+<section class="stage" aria-label="Logical Azure AI Foundry application flow">
+<div class="stage-top"><span>LOGICAL APPLICATION ARCHITECTURE</span><span class="live">LIVE REQUEST TRACE</span></div>
+<svg viewBox="0 0 1260 560" role="img" aria-label="Browser frontend calls a backend API which authenticates to Azure AI Foundry and its model endpoint">
+<defs>
+  <linearGradient id="panel" x1="0" x2="1"><stop stop-color="#132f40"/><stop offset="1" stop-color="#10232f"/></linearGradient>
+  <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#4f9cff"/></marker>
+  <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#ffc26d"/></marker>
+  <path id="appPath" d="M210 270H390H560H755" fill="none"/>
+  <path id="responsePath" d="M755 330H560H390H210" fill="none"/>
+</defs>
+<rect x="30" y="55" width="1200" height="430" rx="16" fill="none" stroke="#315264"/>
+<text x="58" y="88" fill="#62d9ea" font-size="13" font-weight="800" letter-spacing="1.2">APPLICATION TRUST FLOW</text>
+<g id="browser" class="node focus"><rect x="70" y="205" width="170" height="130" rx="12" fill="url(#panel)" stroke="#62d9ea" stroke-width="2"/><rect x="96" y="230" width="118" height="66" rx="5" fill="#346d84"/><path d="M108 310h94M143 296v14" stroke="#b9edf3" stroke-width="3"/><circle cx="155" cy="253" r="12" fill="#b9edf3"/><path d="M135 278c6-15 34-15 40 0" fill="#b9edf3"/><text x="155" y="362" text-anchor="middle" fill="#edf5fa" font-size="12" font-weight="800">BROWSER FRONTEND</text><text x="155" y="382" text-anchor="middle" fill="#9ab0bd" font-size="10">React / HTML / JavaScript</text></g>
+<g id="api" class="node dim"><rect x="350" y="185" width="190" height="170" rx="12" fill="url(#panel)" stroke="#4f9cff" stroke-width="2"/><text x="445" y="220" text-anchor="middle" fill="#4f9cff" font-size="14" font-weight="800">BACKEND API</text><text x="445" y="244" text-anchor="middle" fill="#edf5fa" font-size="11">FastAPI / Node.js</text><path d="M382 267h126M382 285h100M382 303h112" stroke="#55788a" stroke-width="4" stroke-linecap="round"/><text x="445" y="329" text-anchor="middle" fill="#92df9a" font-size="10" font-weight="800">SECRET STAYS SERVER-SIDE</text></g>
+<g id="policy" class="node dim"><rect x="585" y="210" width="135" height="120" rx="12" fill="#193b36" stroke="#92df9a" stroke-width="2"/><path d="M652 235l28 12v25c0 20-14 32-28 38-14-6-28-18-28-38v-25z" fill="#2f725d" stroke="#b6f0bb" stroke-width="2"/><path d="M638 271l10 10 19-23" fill="none" stroke="#d7ffda" stroke-width="4"/><text x="652" y="343" text-anchor="middle" fill="#92df9a" font-size="11" font-weight="800">APP POLICY</text><text x="652" y="360" text-anchor="middle" fill="#acd6b1" font-size="9">validate · rate limit</text></g>
+<rect x="735" y="125" width="430" height="300" rx="16" fill="#102a38" stroke="#4f9cff" stroke-width="2"/>
+<text x="765" y="160" fill="#62d9ea" font-size="13" font-weight="800">AZURE AI FOUNDRY PROJECT</text>
+<g id="foundry" class="node dim"><rect x="775" y="190" width="190" height="100" rx="10" fill="#173e52" stroke="#62d9ea" stroke-width="2"/><text x="870" y="222" text-anchor="middle" fill="#62d9ea" font-size="13" font-weight="800">FOUNDRY ENDPOINT</text><text x="870" y="245" text-anchor="middle" fill="#edf5fa" font-size="11">model deployment API</text><text x="870" y="268" text-anchor="middle" fill="#ffc26d" font-size="10" font-weight="800">CONTROLLED BY BACKEND</text></g>
+<g id="model" class="node dim"><rect x="1000" y="190" width="160" height="100" rx="10" fill="#193d39" stroke="#92df9a"/><text x="1080" y="222" text-anchor="middle" fill="#92df9a" font-size="12" font-weight="800">CHAT MODEL</text><text x="1080" y="245" text-anchor="middle" fill="#b9d6c2" font-size="10">GPT deployment</text><text x="1080" y="268" text-anchor="middle" fill="#b9d6c2" font-size="9">response generated</text></g>
+<g id="controls" class="node dim"><rect x="775" y="330" width="385" height="64" rx="9" fill="#182f3d" stroke="#617d8b"/><text x="967" y="356" text-anchor="middle" fill="#edf5fa" font-size="11" font-weight="800">LOGGING · CONTENT SAFETY · COST GUARDS</text><text x="967" y="377" text-anchor="middle" fill="#9ab0bd" font-size="9">telemetry without exposing secrets</text></g>
+<path d="M240 270H350M540 270H585M720 270H775M965 240H1000" fill="none" stroke="#4f9cff" stroke-width="4" marker-end="url(#arrowBlue)"/>
+<path d="M967 290v40" fill="none" stroke="#617d8b" stroke-width="3" stroke-dasharray="6 6"/>
+<path d="M1000 270h-35" fill="none" stroke="#92df9a" stroke-width="3" marker-end="url(#arrowBlue)"/>
+<g id="packet-request" class="packet"><circle r="8"/><text x="13" y="4">REQUEST</text><animateMotion dur="3.2s" repeatCount="indefinite" rotate="auto"><mpath href="#appPath"/></animateMotion></g>
+<g id="packet-response" class="packet"><circle r="8" fill="#92df9a"/><text x="13" y="4">RESPONSE</text><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" rotate="auto"><mpath href="#responsePath"/></animateMotion></g>
+<text x="75" y="455" fill="#9ab0bd" font-size="12">Enterprise Policy Assistant · protected backend credential</text>
+</svg>
+<div class="controls" aria-label="Walkthrough controls"><button id="back" type="button" aria-label="Go to previous walkthrough step">← Back</button><button id="play" type="button" aria-label="Pause or play the walkthrough">Pause animation</button><button id="next" type="button" aria-label="Go to next walkthrough step">Next →</button><span id="caption">1 · Browser sends a request to the backend</span></div>
+</section>
+</main>
+<script>
+const steps = [
+  { focus:["browser","api"], caption:"1 · Browser sends a request to the backend" },
+  { focus:["api","policy"], caption:"2 · Backend validates input and applies policy" },
+  { focus:["policy","foundry"], caption:"3 · Backend calls the Foundry endpoint" },
+  { focus:["foundry","model"], caption:"4 · Azure AI Foundry runs the model deployment" },
+  { focus:["model","controls"], caption:"5 · Response and telemetry return to the application" }
+];
+let current = 0;
+let playing = true;
+let timer;
+const nodeIds = ["browser","api","policy","foundry","model","controls"];
+function render(step) {
+  current = (step + steps.length) % steps.length;
+  const data = steps[current];
+  nodeIds.forEach(id => { const node = document.getElementById(id); node.classList.toggle("dim", !data.focus.includes(id)); node.classList.toggle("focus", data.focus.includes(id)); });
+  document.getElementById("caption").textContent = data.caption;
+  document.getElementById("packet-request").classList.toggle("go", current >= 1);
+  document.getElementById("packet-response").classList.toggle("go", current >= 4);
+}
+function advance() { render(current + 1); }
+function restartTimer() { clearInterval(timer); if (playing) timer = setInterval(advance, 5600); }
+document.getElementById("next").onclick = () => { advance(); restartTimer(); };
+document.getElementById("back").onclick = () => { render(current - 1); restartTimer(); };
+document.getElementById("play").onclick = () => { playing = !playing; document.getElementById("play").textContent = playing ? "Pause animation" : "Play animation"; restartTimer(); };
+document.addEventListener("keydown", event => { if (event.key === "ArrowRight") { advance(); restartTimer(); } if (event.key === "ArrowLeft") { render(current - 1); restartTimer(); } if (event.key === " ") { event.preventDefault(); document.getElementById("play").click(); } });
+render(0); restartTimer();
+</script>
+</body>
+</html>
