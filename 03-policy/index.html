@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>03 Foundry Instructions | Enterprise Policy Assistant</title><link rel="stylesheet" href="../shared/board.css"></head><body>
+<header><div class="eyebrow">Build step 3 of 6 · Azure AI Foundry drawing board</div><h1>Configure the AI policy in Foundry.</h1><p class="subtitle">The local API performs only basic request checks. The assistant behavior, grounding instructions, refusal behavior, and source-use rules are configured in Azure AI Foundry.</p></header>
+<main><section class="board"><div class="board-top"><span>LOCAL CHECKS + FOUNDRY CONFIGURATION</span><span>AI POLICY LIVES IN FOUNDRY</span></div><div class="board-body"><div><div class="flow"><div class="box">HTTP checks<small>local connector</small></div><div class="arrow">→</div><div class="box">Foundry instructions<small>agent behavior</small></div><div class="arrow">→</div><div class="box">Knowledge source<small>grounded answers</small></div></div><div class="note"><strong>Architecture rule:</strong> Python rejects empty or oversized requests. Azure AI Foundry owns the AI instructions, knowledge grounding, and refusal behavior.</div><div class="live-steps"><h3>Live Azure steps</h3><ol><li>Open the Azure AI Foundry project and create or open the assistant/agent.</li><li>Write instructions to answer from approved sources, cite them, and say when the source is silent.</li><li>Attach the Foundry knowledge source and test grounded and out-of-scope questions.</li><li>Update instructions in Foundry when behavior changes; do not edit a local Python prompt.</li></ol></div></div></div></section><aside class="code-panel"><div class="code-top"><span>LOCAL CODE BOARD</span><span>03-policy/guardrails.py</span></div><pre><span class="token-comment"># only request-shape checks live locally</span>
+<span class="token-key">def</span> validate_question(question):
+    normalized = question.strip()
+    <span class="token-key">if not</span> normalized:
+        <span class="token-key">raise</span> ValueError(<span class="token-string">"Question required"</span>)
+    <span class="token-key">if</span> len(normalized) &gt; 2000:
+        <span class="token-key">raise</span> ValueError(<span class="token-string">"Question too long"</span>)
+    <span class="token-key">return</span> normalized
+
+<span class="token-comment"># AI instructions are configured in
+# Azure AI Foundry, not in this file.</span></pre></aside></main>
+<div class="nav"><a class="button" href="../02-backend-api/index.html">← Backend API</a><a class="button primary" href="../04-foundry/index.html">Next: Foundry model →</a></div>
+</body></html>
