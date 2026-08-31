@@ -1,10 +1,13 @@
 # Folder 06 / Build Step 5: Azure AI Foundry Knowledge Base
 
-This folder contains **synthetic demonstration policies** created for the YouTube walkthrough. They look and read like enterprise policy documents, but they are not real organizational policy and must not be used for production decisions.
+This folder contains **synthetic demonstration policies**. They look and read like enterprise
+policy documents, but they are not real organizational policy and must not be used for production
+decisions.
 
 This is part of an Azure AI Foundry application demo, not a Python search tutorial. These files are source content to upload into Azure AI Foundry. We will not implement local document search, local retrieval logic, Azure API Management, or an Azure-hosted application API.
 
-**Live demo path:** the frontend will call the local connector, and the connector will invoke the new agent created during the video. Use the proposed demo name `policydesk-youtube-demo`. The existing `niteen-test-policydesk` agent remains a reference; do not assume it is the agent used in the recording.
+The frontend calls the local connector, which invokes the agent configured in
+`02-backend-api/.env`. Use your own Azure AI Foundry project endpoint and agent name.
 
 The purpose is to demonstrate the difference between:
 
@@ -40,7 +43,10 @@ Synthetic policy files
 
 The assistant must say when the documents do not answer a question. It must not invent an approval, owner, retention period, or exception.
 
-## Live Azure AI Foundry Steps
+## Configure Azure AI Foundry Knowledge
+
+The exact button names can vary as the Foundry experience changes, but the configuration sequence
+is the important part.
 
 ### 1. Open the Foundry project
 
@@ -65,7 +71,8 @@ data-classification-and-handling.md
 third-party-model-review-standard.md
 ```
 
-Point out that each file is marked as a synthetic demonstration document. 
+Do not upload real company policy, customer information, credentials, or regulated data to a demo
+project.
 
 ### 4. Configure grounding behavior
 
@@ -125,11 +132,11 @@ Expected behavior:
 - The assistant says the connected policy source does not answer the question.
 - It does not invent a dollar amount or approval path.
 
-### 7. Architecture
+## Architecture
 
-
-
-> We are uploading the policy documents into Azure AI Foundry's knowledge workflow. Foundry handles the knowledge connection, retrieval, grounding, and model response. Our local FastAPI process is only the connector that sends the user's question to Foundry. We are not building a local document search engine.
+Azure AI Foundry manages the knowledge connection, retrieval, grounding, and model response. The
+local FastAPI process is only the connector that sends the user's question to Foundry; it does not
+implement a local document-search engine.
 
 ## What Changes When Policy Is Updated
 
@@ -153,9 +160,8 @@ Use a question that requires organization-specific information:
 What approvals are required before using a third-party model with Confidential data?
 ```
 
-Record the answer and explain:
-
-> This is the model without our enterprise policy knowledge. It may provide a general answer, but we cannot treat it as our organization's approved policy response.
+The answer may be generally useful, but it is not an approved, grounded policy response without
+the connected knowledge source.
 
 Expected observation:
 
@@ -171,11 +177,11 @@ After uploading and connecting the documents in Foundry, run the same question t
 
 Use this sequence in Azure AI Foundry. The labels may vary slightly between the Foundry portal experiences, but the relationship is the same: source documents are added to a knowledge source, and that source is attached to the assistant or agent used for the conversation.
 
-1. Open the Azure AI Foundry project that contains `policydesk-gpt-5-mini`.
+1. Open the Azure AI Foundry project that contains your selected model deployment.
 2. Open the project workspace, agent builder, or assistant area.
-3. Create a new assistant/agent during the recording.
-4. Name it `policydesk-youtube-demo`.
-5. Confirm that the assistant uses the `policydesk-gpt-5-mini` deployment.
+3. Create a new assistant or agent.
+4. Give it a meaningful name, such as `policydesk-demo`.
+5. Confirm that the assistant uses your selected model deployment.
 6. Open the assistant's **Knowledge**, **Data**, **Files**, or **Add knowledge** section.
 7. Create a knowledge source named `policydesk-demo-policies`.
 8. Upload these three synthetic documents:
@@ -197,7 +203,7 @@ Use this sequence in Azure AI Foundry. The labels may vary slightly between the 
 
 Do not update `.env` immediately after creating the agent. First prove that the agent itself works in Azure AI Foundry:
 
-1. Start a new conversation in the new `policydesk-youtube-demo` agent playground.
+1. Start a new conversation in your configured agent's playground.
 2. Ask an in-domain question:
 
     ```text
@@ -240,7 +246,7 @@ Use this shape:
 
 ```env
 AZURE_AI_PROJECT_ENDPOINT=https://<resource>.services.ai.azure.com/api/projects/<project-name>
-AZURE_AI_AGENT_NAME=policydesk-youtube-demo
+AZURE_AI_AGENT_NAME=<your-agent-name>
 ```
 
 Do not use the base model endpoint ending in `/openai/v1` for the saved-agent project flow. Restart the backend after updating `.env`, then test the same three questions through the local chatbot.
